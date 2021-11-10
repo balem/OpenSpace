@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Open Space</title>
+    <style>
+        body{
+            background: black;
+        }
+        .space{
+            display: flex;
+            flex-direction: row;
+            background: url("img/space.png") no-repeat;
+            background-size: cover;
+            width: 70%;
+            margin: 0 auto;
+            height: 100vh;
+        }
+
+        img.rocket{
+            position: absolute;
+            left: 40em;
+            bottom: 20em;
+            transform: rotate(25deg);
+            width: 15em;
+        }
+
+        img.planet{
+            width: 40em;
+            position: absolute;
+            bottom: 0px;
+        }
+        .control-panel{
+            top: 20em;
+            left: 60em;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: yellow;
+            border: 1px solid black;
+            background-color: black;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 45px, yellow 45px, yellow 60px);
+
+        }
+        .control-panel__inner{
+            margin: 1em;
+            background: #252424;
+            width: 30em;
+            height: 15em;
+        }
+        .levers{
+            display: flex;
+            justify-content: space-between;
+        }
+        .levers input{
+            text-align: center;
+            transform: rotate(-90deg);
+            width: 5.7em;
+            margin-bottom: 4em;
+        }
+
+        .planet{
+            position: relative;
+            float: left;
+        }
+
+
+        .check-buttons{
+            width: 80%;
+            display: flex;
+            justify-content: space-between;
+            margin: 0.7em;
+        }
+
+        .check-buttons input[type=checkbox]{
+            margin: 2em 3em;
+        }
+
+        .control-panel__inner{
+            padding: 1em;
+        }
+
+        .control-panel__inner input[type=password]{
+            background: transparent;
+            border: 1px solid yellow;
+            border-radius: 0.5em;
+            color: yellow;
+        }
+
+        .control-panel__inner input.ok{
+            background: yellow;
+            border-radius: 0.5em;
+        }
+
+        input[type=button].lunch{
+            background: red;
+            color: yellow;
+            border-radius: 5em;
+            width: 6em;
+            height: 4em;
+        }
+
+        .rocketMove{
+            animation-name: lunchRocket;
+            animation-duration: 5s;
+            animation-timing-function: ease-in;
+        }
+
+        @keyframes lunchRocket {
+            from{
+                top: 20em;
+            }
+            to{
+                top: -50em;
+                left: 70em;
+            }
+        }
+
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let passwordField = document.getElementById("password");
+            let okButton = document.getElementById("ok");
+            let controlInputs = document.querySelectorAll(".check-buttons input, .levers input");
+            let lunchButton =  document.getElementById("lunch");
+            lunchButton.setAttribute("disabled", "disabled");
+            lunchButton.addEventListener("click", function (){
+                document.getElementById("rocket").classList.add("rocketMove");
+            });
+            controlInputs.forEach(element => element.setAttribute("disabled", "disabled"));
+            okButton.addEventListener("click", function () {
+                if(passwordField.value === 'TrustNo1'){
+                    controlInputs.forEach(element => element.removeAttribute("disabled"));
+                    okButton.setAttribute("disabled", "disabled");
+                    passwordField.setAttribute("disabled", "disabled");
+                } else {
+                    controlInputs.forEach(element => element.setAttribute("disabled", "disabled"));
+                    okButton.removeAttribute("disabled");
+                    passwordField.removeAttribute("disabled");
+                }
+            });
+
+            controlInputs.forEach(element => element.addEventListener("change", function () {
+
+                if(validateLunch()){
+                    lunchButton.removeAttribute("disabled");
+                }else{
+                    lunchButton.setAttribute("disabled", "disabled");
+                }
+            }));
+
+            const validateLunch = function (){
+                let valid = true;
+                for (const check of document.querySelectorAll(".check-buttons input[type=checkbox]")) {
+                    if(!check.checked){
+                        valid = false;
+                        break;
+                    }
+                }
+                if(valid){
+                    for (const range of document.querySelectorAll(".levers input[type=range]")) {
+                        if(range.value < 100){
+                            valid = false;
+                        }
+                    }
+                }
+                return valid;
+            };
+        });
+
+
+    </script>
+</head>
+<body>
+<div class="space">
+    <div class="planet-area">
+        <img src="img/mars.png" alt="planet mars" class="planet">
+        <img src="img/rocket.png" alt="rocket" class="rocket" id="rocket">
+    </div>
+    <div class="control-panel">
+        <div class="control-panel_:q::wq" onchange="console.log('only for test')">
+            <input id="password" type="password" placeholder="Enter password to unlock" >
+            <input id="ok" type="button" value="OK" class="ok">
+            <div class="check-buttons">
+             <input type="checkbox" onchange="console.log('only for test')">
+                <input type="checkbox">
+                <input type="checkbox">
+                <input type="checkbox">
+                <input type="checkbox">
+                <input type="checkbox">
+            </div>
+            <div class="levers">
+                <input type="range">
+                <input type="range">
+                <input type="range">
+                <input type="range">
+                <input type="range">
+            </div>
+        <input type="button" value="launch" class="lunch" id="lunch">
+        </div>
+    </div>
+</div>
+</body>
+</html>
